@@ -19,7 +19,7 @@ def gg():
 # product3 = Product(id=103, name="kumar")
 
 #we create the dict for these products
-product = [
+products = [
     Product(
         id=101,
         name="Laptop",
@@ -53,7 +53,7 @@ product = [
 #we get all the product
 @app.get("/product")
 def get_all():
-    return product
+    return products
 
 
 
@@ -62,7 +62,7 @@ def get_all():
 @app.get("/productss")
 def get_product_by_id(id:int):
 
-    for p in product:
+    for p in products:
 
         if p.id == id:
             return p
@@ -73,8 +73,42 @@ def get_product_by_id(id:int):
 #http://127.0.0.1:8000/products
 @app.get("/products")
 def get_product_by_id():
+    return products[0]
 
-    return product[0]
+
+@app.get("/product/{id}")
+def get_product_by_id(id: int):
+
+    if id > 0 and id <= len(products):
+        return products[id-1]
+
+    return {"error": "Product not found"}
 
 
- 
+@app.post("/product/")
+def add_product(new_product:Product):
+    products.append(new_product)
+    return new_product
+
+@app.put("/product/{id}")
+def update_product(id: int, new_product: Product):
+
+    for i in range(len(products)):
+
+        if products[i].id == id:
+
+            products[i] = new_product
+
+            return {"message": "Product updated successfully", "product": new_product}
+
+    return {"error": "Product not found"}
+
+
+@app.delete("/product")
+def delete(id:int):
+    for i in range(len(products)):
+        if products[i].id == id:
+            del products[i]
+            return "product deleted"
+        
+    return "products didnot found"
