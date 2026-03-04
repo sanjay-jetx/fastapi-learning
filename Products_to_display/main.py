@@ -94,13 +94,9 @@ def add_product(new_product:Product):
 def update_product(id: int, new_product: Product):
 
     for i in range(len(products)):
-
         if products[i].id == id:
-
             products[i] = new_product
-
             return {"message": "Product updated successfully", "product": new_product}
-
     return {"error": "Product not found"}
 
 

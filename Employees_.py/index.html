@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Employee Manager</title>
+</head>
+
+<body>
+
+<h2>Add Employee</h2>
+
+<input id="id" placeholder="Employee ID"><br><br>
+<input id="name" placeholder="Name"><br><br>
+<input id="age" placeholder="Age"><br><br>
+<input id="salary" placeholder="Salary"><br><br>
+<input id="department" placeholder="Department"><br><br>
+
+<button onclick="addEmployee()">Add Employee</button>
+
+<h2>Employees</h2>
+
+<button onclick="loadEmployees()">View Employees</button>
+
+<pre id="result"></pre>
+
+<script>
+
+async function addEmployee(){
+
+const data = {
+id: parseInt(document.getElementById("id").value),
+name: document.getElementById("name").value,
+age: parseInt(document.getElementById("age").value),
+salary: parseInt(document.getElementById("salary").value),
+department: document.getElementById("department").value
+}
+
+await fetch("http://127.0.0.1:8000/employee",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body: JSON.stringify(data)
+})
+
+alert("Employee Added")
+
+}
+
+
+async function loadEmployees(){
+
+let res = await fetch("http://127.0.0.1:8000/employees")
+
+let data = await res.json()
+
+document.getElementById("result").innerText =
+JSON.stringify(data,null,2)
+
+}
+
+</script>
+
+</body>
+
+</html>
