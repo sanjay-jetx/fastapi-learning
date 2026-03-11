@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Query,HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -35,7 +35,7 @@ def home():
 def add_employee(emp: Employee):
 
     if emp.id in employees:
-        return {"error": "Employee already exists"}
+        raise HTTPException(status_code=400,detail="employee already exist")
 
     employees[emp.id] = emp
 
@@ -47,3 +47,28 @@ def add_employee(emp: Employee):
 def get_employees():
 
     return employees
+
+
+@app.get("/employees/{id}")
+def get_sparticularid(id:int):
+    if id in employees:
+        return employees[id]
+
+
+@app.delete("/employees/{id}")
+def delete_sparticularid(id:int = Query(ge=100,le=200 )):
+    if id in employees:
+        del employees[id]
+        return {"message": "Employee deleted successfully"}
+
+    return {"error": "Employee not found"}
+
+
+@app.put("/employee/{id}")
+def update_employee(id:int,emp:employees):
+    if emp.id in employees:
+        employees[id] = emp
+        return {"message": "Employee updated successfully"}
+    else:
+        return {"error": "Employee not found"}
+
