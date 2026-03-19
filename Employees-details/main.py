@@ -50,8 +50,9 @@ def get_employees():
 
 
 @app.get("/employees/{id}")
-def get_sparticularid(id:int):
-    if id in employees:
+def get_sparticularid(id:int=Query(ge=100,le=200),
+                      name:str = Query(min_length=3,max_length=50,regex="^[A-Za-z]+$")):
+    if id  in employees:
         return employees[id]
 
 
