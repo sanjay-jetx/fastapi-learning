@@ -11,18 +11,24 @@ cursor=conn.cursor()
 #table creation made here
 
 cursor.execute('''
-       create table if not exists items(
-            item_id integer primary key ,
-            name text not null,
-            des text
+       create table if not exists Employee(
+            emp_id integer primary key ,
+            Name text not null,
+            Age int no null,
+            role text,
+            salary Real
     )
     ''')
 
 conn.commit()
+
+
 class item(BaseModel):
-    ID:int
-    name:str
-    des:str
+    emp_id:int
+    Name:str
+    Age:int
+    role:str
+    salary:int
 
 
 @app.post("/items/create")
@@ -98,3 +104,9 @@ def update_item(item_id: int, i: item):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.delete("/items/delete/{name}")
+def delete(name:str):
+    cursor.execute("delete from items where name = ?",(name,))
+    conn.commit()
