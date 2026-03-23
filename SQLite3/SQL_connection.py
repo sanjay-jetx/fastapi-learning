@@ -66,3 +66,35 @@ def read_items():
 
          
      
+@app.get("/item/readone/{name}")
+def read_one(name: str):
+    try:
+        cursor.execute("select * from items where name = ?", (name,))
+        row = cursor.fetchone()
+
+        if row is None:
+            raise HTTPException(status_code=404, detail="Item not found")
+
+        return {
+            "id": row[0],
+            "name": row[1],
+            "des": row[2]
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.put("/item/update/{item_id}")
+def update_item(item_id: int, i: item):
+    try:
+        cursor.execute(
+            "update items set name=?, des=? where item_id=?",
+            (i.name, i.des, item_id)
+        )
+        conn.commit()
+
+        return {"message": "Updated successfully"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
