@@ -2,11 +2,11 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from SQLAlchemy.basics import models
 
-def create_user(db:Session , name:str , id:int,email:str , age:int):
-    existing_user=db.query(models.User).filter(models.User.id==id).first()
+def create_user(db:Session , user):
+    existing_user=db.query(models.User).filter(models.User.id==user.id).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="ID already exists")
-    user = models.User(name=name,age=age,id=id,email=email)
+    user = models.User(name=user.name,age=user.age,id=user.id,email=user.email)
     db.add(user)
     db.commit()
     db.refresh(user)

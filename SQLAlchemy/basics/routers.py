@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from SQLAlchemy.basics import crud
+from . import crud
 from SQLAlchemy.basics.database import get_db
 from SQLAlchemy.basics.schemas import UserCreate
 
@@ -8,7 +8,7 @@ router=APIRouter()
 
 @router.post("/users")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    return crud.create_user((db, user.name, user.id, user.email, user.age))
+    return crud.create_user(db, user)
 
 
 @router.get("/users")
